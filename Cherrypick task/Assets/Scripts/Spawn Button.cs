@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 
 public class SpawnButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-
     public Spawner spawner;
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)

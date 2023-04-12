@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
 
 public class GridCreator : MonoBehaviour
 {
@@ -8,13 +9,10 @@ public class GridCreator : MonoBehaviour
 
     [HideInInspector] public Slot[,] gridArray;
 
-    [HideInInspector] public GameObject[,] itemArray;
-
     void Awake()
     {
         int[] gridSize = LoadGridSize(gridSizeFilePath);
         gridArray = new Slot[gridSize[0], gridSize[1]];
-        itemArray = new GameObject[gridSize[0], gridSize[1]];
 
         Vector3 centerPosition = new Vector3(-(gridSize[0] - 1) / 2f, -(gridSize[1] - 1) / 2f, 0);
 
@@ -60,5 +58,65 @@ public class GridCreator : MonoBehaviour
     {
         public int width;
         public int height;
+    }
+
+    public void ClearAdjacentSameColors()
+    {
+        List<GameObject> itemsToClear= new List<GameObject>();
+        int width = gridArray.GetLength(0);
+        int height = gridArray.GetLength(1);
+
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                var currentGameObject = gridArray[x, y];
+                if(currentGameObject == null || gridArray[x, y].isBlocked)
+                {
+                    continue;
+                }
+
+                if (x > 0 && gridArray[x - 1, y].itemColor == currentGameObject.itemColor)
+                {
+                    if (!itemsToClear.Contains(currentGameObject.item))
+                    {
+                        itemsToClear.Add(currentGameObject.item);
+                        currentGameObject.isOccupied = false;
+                    }
+                }
+
+                if (x < width - 1 && gridArray[x + 1, y].itemColor == currentGameObject.itemColor)
+                {
+                    if (!itemsToClear.Contains(currentGameObject.item))
+                    {
+                        itemsToClear.Add(currentGameObject.item);
+                        currentGameObject.isOccupied = false;
+                    }
+                }
+
+                if (y > 0 && gridArray[x, y - 1].itemColor == currentGameObject.itemColor)
+                {
+                    if (!itemsToClear.Contains(currentGameObject.item))
+                    {
+                        itemsToClear.Add(currentGameObject.item);
+                        currentGameObject.isOccupied = false;
+                    }
+                }
+
+                if (y < height - 1 && gridArray[x, y + 1].itemColor == currentGameObject.itemColor)
+                {
+                    if (!itemsToClear.Contains(currentGameObject.item))
+                    {
+                        itemsToClear.Add(currentGameObject.item);
+                        currentGameObject.isOccupied = false;
+                    }
+                }
+            }
+        }
+        foreach (var item in itemsToClear)
+        {
+            Destroy(item);
+        }
+        itemsToClear.Clear();
     }
 }

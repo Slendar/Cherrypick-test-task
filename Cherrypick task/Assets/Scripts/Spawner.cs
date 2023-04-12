@@ -142,7 +142,6 @@ public class Spawner : MonoBehaviour
         }
     }
 
-  
     private Color GetRandomColorRGB()
     {
         return itemColors[Random.Range(0, 3)];
@@ -157,10 +156,12 @@ public class Spawner : MonoBehaviour
             Vector3 gridSlotWithSpawnerWorldPosition = grid.gridArray[currentPosition.x, currentPosition.y].transform.position;
 
             GameObject item = Instantiate(itemToSpawn, gridSlotWithSpawnerWorldPosition, Quaternion.identity);
-            item.GetComponent<Renderer>().material.color = GetRandomColorRGB();
+            var randomColor = GetRandomColorRGB();
+            item.GetComponent<SpriteRenderer>().material.color = randomColor;
 
             grid.gridArray[spawnPosition.x, spawnPosition.y].isOccupied = true;
-            grid.itemArray[spawnPosition.x, spawnPosition.y] = item;
+            grid.gridArray[spawnPosition.x, spawnPosition.y].item = item;
+            grid.gridArray[spawnPosition.x, spawnPosition.y].itemColor = randomColor;
 
             StartCoroutine(MoveItem(item.transform, gridSlotWithSpawnerWorldPosition, gridSlotWorldPosition));
 
