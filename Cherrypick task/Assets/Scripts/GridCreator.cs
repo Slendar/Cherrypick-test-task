@@ -8,10 +8,13 @@ public class GridCreator : MonoBehaviour
 
     [HideInInspector] public Slot[,] gridArray;
 
+    [HideInInspector] public GameObject[,] itemArray;
+
     void Awake()
     {
         int[] gridSize = LoadGridSize(gridSizeFilePath);
         gridArray = new Slot[gridSize[0], gridSize[1]];
+        itemArray = new GameObject[gridSize[0], gridSize[1]];
 
         Vector3 centerPosition = new Vector3(-(gridSize[0] - 1) / 2f, -(gridSize[1] - 1) / 2f, 0);
 
