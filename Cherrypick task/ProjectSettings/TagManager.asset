@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Grid
+    uniqueID: 3158253277
+    locked: 0
+  - name: Spawner
+    uniqueID: 1904199765
+    locked: 0
+  - name: Items
+    uniqueID: 906272091
+    locked: 0

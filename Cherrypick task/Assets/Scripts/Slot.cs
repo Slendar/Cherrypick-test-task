@@ -3,6 +3,7 @@ using UnityEngine;
 public class Slot : MonoBehaviour
 {
     public bool isOccupied = false;
+    public bool isBlocked = false;
     public int positionX = 0;
     public int positionY = 0;
 
