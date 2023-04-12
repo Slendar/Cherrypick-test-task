@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
     private Vector2Int currentPosition;
     private List<Color> itemColors = new List<Color>();
 
-    private bool isDragging = false;
+    public bool isDragging = false;
     private Slot lastDraggedSlot = null;
 
     private void Start()    
@@ -160,10 +160,9 @@ public class Spawner : MonoBehaviour
             item.GetComponent<SpriteRenderer>().material.color = randomColor;
 
             grid.gridArray[spawnPosition.x, spawnPosition.y].isOccupied = true;
-            grid.gridArray[spawnPosition.x, spawnPosition.y].item = item;
-            grid.gridArray[spawnPosition.x, spawnPosition.y].itemColor = randomColor;
+            Slot slot = grid.gridArray[spawnPosition.x, spawnPosition.y];
 
-            StartCoroutine(MoveItem(item.transform, gridSlotWithSpawnerWorldPosition, gridSlotWorldPosition));
+            StartCoroutine(MoveItem(item.transform, gridSlotWithSpawnerWorldPosition, gridSlotWorldPosition, slot, item, randomColor));
 
             spawnPosition = CheckClockwise();
             yield return new WaitForEndOfFrame();
@@ -171,7 +170,7 @@ public class Spawner : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator MoveItem(Transform itemTransform, Vector3 startPosition, Vector3 endPosition)
+    private IEnumerator MoveItem(Transform itemTransform, Vector3 startPosition, Vector3 endPosition, Slot slot, GameObject item, Color itemColor)
     {
         float startTime = Time.time;
         float endTime = startTime + 0.5f;
@@ -184,6 +183,8 @@ public class Spawner : MonoBehaviour
         }
 
         itemTransform.position = new Vector3(endPosition.x, endPosition.y, 0);
+        slot.item = item;
+        slot.itemColor = itemColor;
     }
 
 

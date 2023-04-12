@@ -62,7 +62,7 @@ public class GridCreator : MonoBehaviour
 
     public void ClearAdjacentSameColors()
     {
-        List<GameObject> itemsToClear= new List<GameObject>();
+        List<Slot> slotsToClear = new List<Slot>();
         int width = gridArray.GetLength(0);
         int height = gridArray.GetLength(1);
 
@@ -71,52 +71,53 @@ public class GridCreator : MonoBehaviour
             for (var y = 0; y < height; y++)
             {
                 var currentGameObject = gridArray[x, y];
-                if(currentGameObject == null || gridArray[x, y].isBlocked)
+                if(currentGameObject == null || gridArray[x, y].isBlocked || currentGameObject.itemColor == Color.black)
                 {
                     continue;
                 }
 
                 if (x > 0 && gridArray[x - 1, y].itemColor == currentGameObject.itemColor)
                 {
-                    if (!itemsToClear.Contains(currentGameObject.item))
+                    if (!slotsToClear.Contains(currentGameObject))
                     {
-                        itemsToClear.Add(currentGameObject.item);
+                        slotsToClear.Add(currentGameObject);
                         currentGameObject.isOccupied = false;
                     }
                 }
 
                 if (x < width - 1 && gridArray[x + 1, y].itemColor == currentGameObject.itemColor)
                 {
-                    if (!itemsToClear.Contains(currentGameObject.item))
+                    if (!slotsToClear.Contains(currentGameObject))
                     {
-                        itemsToClear.Add(currentGameObject.item);
+                        slotsToClear.Add(currentGameObject);
                         currentGameObject.isOccupied = false;
                     }
                 }
 
                 if (y > 0 && gridArray[x, y - 1].itemColor == currentGameObject.itemColor)
                 {
-                    if (!itemsToClear.Contains(currentGameObject.item))
+                    if (!slotsToClear.Contains(currentGameObject))
                     {
-                        itemsToClear.Add(currentGameObject.item);
+                        slotsToClear.Add(currentGameObject);
                         currentGameObject.isOccupied = false;
                     }
                 }
 
                 if (y < height - 1 && gridArray[x, y + 1].itemColor == currentGameObject.itemColor)
                 {
-                    if (!itemsToClear.Contains(currentGameObject.item))
+                    if (!slotsToClear.Contains(currentGameObject))
                     {
-                        itemsToClear.Add(currentGameObject.item);
+                        slotsToClear.Add(currentGameObject);
                         currentGameObject.isOccupied = false;
                     }
                 }
             }
         }
-        foreach (var item in itemsToClear)
+        foreach (var slot in slotsToClear)
         {
-            Destroy(item);
+            slot.itemColor = Color.black;
+            Destroy(slot.item);
         }
-        itemsToClear.Clear();
+        slotsToClear.Clear();
     }
 }
